@@ -9,23 +9,21 @@ export default function Navbar() {
   return (
     <div className='flex items-center justify-between pt-2 relative'>
 
-      {/* Logo */}
       <Link className='text-2xl font-bold flex items-center' href="/">
         <span className='text-[#bc6c25]'>Brew</span>
         <span className='bg-black text-white px-1 rounded'>Box</span>
       </Link>
 
-      {/* Desktop menu */}
       <ul className='hidden gap-8 md:flex'>
-        <li><Link href="/">Accueil</Link></li>
-        <li><Link href="/catalogue">Catalogue</Link></li>
-        <li><Link href="/notre-histoire">Notre histoire</Link></li>
-        <li><Link href="/guide-du-cafe">Guide du café</Link></li>
+        <li className='hover:text-(--primary) duration-500'><Link href="/">Accueil</Link></li>
+        <li className='hover:text-(--primary) duration-500'><Link href="/catalogue">Catalogue</Link></li>
+        <li className='hover:text-(--primary) duration-500'><Link href="/notre-histoire">Notre histoire</Link></li>
+        <li className='hover:text-(--primary) duration-500'><Link href="/guide-du-cafe">Guide du café</Link></li>
       </ul>
 
       {/* Button + burger */}
       <div className='flex items-center gap-4'>
-        <button className='hidden md:block bg-(--primary) text-(--text-color) px-4 py-2 rounded-xl'>
+        <button className='hidden hover:-translate-y-2 duration-500 cursor-pointer font-bold md:block bg-(--primary) text-(--text-color) px-4 py-2 rounded-xl'>
           Commander
         </button>
 

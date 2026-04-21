@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <>
       <h1 className="text-4xl font-bold text-center mt-10">
-        Bienvenue sur EcoloShop
+        Bienvenue sur BrewBox
       </h1>
     </>
   );
