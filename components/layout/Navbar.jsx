@@ -1,32 +1,69 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, ShoppingBag } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const pathname = usePathname()
+
+  // 🔥 Sticky au scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // 🔥 helper pour lien actif
+  const isActive = (path) => pathname === path
 
   return (
-    <div className='flex items-center justify-between pt-2 relative'>
+    <div className={`
+      flex items-center justify-between pt-2 md:px-[10%] px-4
+      fixed top-0 left-0 w-full z-50
+      transition-all duration-300 pb-2
+      ${isScrolled ? "backdrop-blur-md shadow-md bg-white/70" : "bg-transparent"}
+    `}>
 
-      <Link className='text-2xl font-bold flex items-center' href="/">
+      <Link className='text-xl md:text-2xl font-bold flex items-center' href="/">
         <span className='text-[#bc6c25]'>Brew</span>
         <span className='bg-black text-white px-1 rounded'>Box</span>
       </Link>
 
+      {/* Desktop menu */}
       <ul className='hidden gap-8 md:flex'>
-        <li className='hover:text-(--primary) duration-500'><Link href="/">Accueil</Link></li>
-        <li className='hover:text-(--primary) duration-500'><Link href="/catalogue">Catalogue</Link></li>
-        <li className='hover:text-(--primary) duration-500'><Link href="/notre-histoire">Notre histoire</Link></li>
-        <li className='hover:text-(--primary) duration-500'><Link href="/guide-du-cafe">Guide du café</Link></li>
+        <li className={`duration-300 ${isActive("/") ? "text-[var(--primary)]" : "hover:text-[var(--primary)]"}`}>
+          <Link href="/">Accueil</Link>
+        </li>
+        <li className={`duration-300 ${isActive("/catalogue") ? "text-[var(--primary)]" : "hover:text-[var(--primary)]"}`}>
+          <Link href="/catalogue">Catalogue</Link>
+        </li>
+        <li className={`duration-300 ${isActive("/notre-histoire") ? "text-[var(--primary)]" : "hover:text-[var(--primary)]"}`}>
+          <Link href="/notre-histoire">Notre histoire</Link>
+        </li>
+        <li className={`duration-300 ${isActive("/guide-du-cafe") ? "text-[var(--primary)]" : "hover:text-[var(--primary)]"}`}>
+          <Link href="/guide-du-cafe">Guide du café</Link>
+        </li>
       </ul>
 
-      {/* Button + burger */}
-      <div className='flex items-center gap-4'>
-        <button className='hidden hover:-translate-y-2 duration-500 cursor-pointer font-bold md:block bg-(--primary) text-(--text-color) px-4 py-2 rounded-xl'>
-          Commander
-        </button>
+      {/* Right side */}
+      <div className='flex items-center gap-2 md:gap-4'>
+        <div>
+          <ShoppingBag className='cursor-pointer' size={24} />
+        </div>
 
+        <Link href="/catalogue">
+          <button className='hidden hover:-translate-y-2 duration-500 cursor-pointer font-bold md:block bg-[var(--primary)] text-[var(--text-color)] px-4 py-2 rounded-xl'>
+            Commander
+          </button>
+        </Link>
+
+        {/* Burger */}
         <button 
           className='md:hidden'
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -47,27 +84,39 @@ export default function Navbar() {
       {/* Mobile menu */}
       <div className={`
         fixed top-0 right-0 z-30 h-screen w-[70%] max-w-sm
-        bg-(--primary)/80 backdrop-blur-sm
+        bg-[var(--primary)]/80 backdrop-blur-sm
         transform transition-transform duration-300 ease-in-out
         ${isMenuOpen ? "translate-x-0" : "translate-x-full"}
         flex flex-col
       `}>
         <X 
-          className='absolute top-4 right-4 cursor-pointer text-(--text-color)'
+          className='absolute top-4 right-4 cursor-pointer text-[var(--text-color)]'
           onClick={() => setIsMenuOpen(false)}
         />
 
-        <ul className='flex flex-col gap-6 pt-24 px-6 text-(--text-color) text-lg'>
-          <li className='hover:-translate-y-2 duration-300' onClick={() => setIsMenuOpen(false)}>
+        <ul className='flex flex-col gap-6 pt-24 px-6 text-[var(--text-color)] text-lg'>
+          <li 
+            className={`duration-300 ${isActive("/") ? "text-white font-bold" : "hover:-translate-y-2"}`}
+            onClick={() => setIsMenuOpen(false)}
+          >
             <Link href="/">Accueil</Link>
           </li>
-          <li className='hover:-translate-y-2 duration-300' onClick={() => setIsMenuOpen(false)}>
+          <li 
+            className={`duration-300 ${isActive("/catalogue") ? "text-white font-bold" : "hover:-translate-y-2"}`}
+            onClick={() => setIsMenuOpen(false)}
+          >
             <Link href="/catalogue">Catalogue</Link>
           </li>
-          <li className='hover:-translate-y-2 duration-300' onClick={() => setIsMenuOpen(false)}>
+          <li 
+            className={`duration-300 ${isActive("/notre-histoire") ? "text-white font-bold" : "hover:-translate-y-2"}`}
+            onClick={() => setIsMenuOpen(false)}
+          >
             <Link href="/notre-histoire">Notre histoire</Link>
           </li>
-          <li className='hover:-translate-y-2 duration-300' onClick={() => setIsMenuOpen(false)}>
+          <li 
+            className={`duration-300 ${isActive("/guide-du-cafe") ? "text-white font-bold" : "hover:-translate-y-2"}`}
+            onClick={() => setIsMenuOpen(false)}
+          >
             <Link href="/guide-du-cafe">Guide du café</Link>
           </li>
         </ul>
