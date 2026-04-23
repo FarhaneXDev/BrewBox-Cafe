@@ -1,6 +1,7 @@
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/layout/Navbar";
+import CartDrawer from "../components/panier/CartDrawer";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -20,6 +21,7 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-full flex flex-col px-6 md:px-[10%]">
         <Navbar />
+        <CartDrawer />
         {children}
       </body>
     </html>

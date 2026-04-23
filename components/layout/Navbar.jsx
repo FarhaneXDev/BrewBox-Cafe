@@ -3,11 +3,14 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Menu, X, ShoppingBag } from 'lucide-react'
 import { usePathname } from 'next/navigation'
+import { useCartStore } from '../../lib/cartStore'
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const pathname = usePathname()
+  const { openDrawer, items } = useCartStore()
+  const totalItems = items.reduce((acc, item) => acc + item.quantity, 0)
 
   // 🔥 Sticky au scroll
   useEffect(() => {
@@ -53,8 +56,13 @@ export default function Navbar() {
 
       {/* Right side */}
       <div className='flex items-center gap-2 md:gap-4'>
-        <div>
-          <ShoppingBag className='cursor-pointer' size={24} />
+        <div className='relative'>
+          <ShoppingBag onClick={openDrawer} className='cursor-pointer' size={24} />
+          {totalItems > 0 && (
+            <span className='absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center'>
+              {totalItems}
+            </span>
+          )}
         </div>
 
         <Link href="/catalogue">

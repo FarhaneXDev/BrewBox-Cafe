@@ -1,5 +1,6 @@
 import Image from "next/image";
 import {MoveRight, MoveUpRight} from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -14,14 +15,18 @@ export default function Home() {
           <p className="mt-6 md:mt-8 font-normal text-gray-500 text-sm md:text-base">Grains soigneusement sélectionnés, torréfaction artisanale, livrés directement chez vous. Chaque tasse raconte une origine. </p>
         </div>
         <div className="mt-8 md:mt-12 ml-0 md:ml-12 flex flex-col sm:flex-row gap-4 md:gap-6">
-          <button className="flex items-center justify-center border border-black/40 cursor-pointer hover:-translate-y-2 duration-500 rounded-xl py-2 px-4 text-sm md:text-base">
-            Découvrir le catalogue
-            <MoveRight className="ml-2" size={18} />
-          </button>
-          <button className="flex items-center justify-center bg-(--primary) text-white cursor-pointer hover:-translate-y-2 duration-500 rounded-xl py-2 px-4 text-sm md:text-base">
-            Notre histoire
-            <MoveUpRight className="ml-2" size={18} />
-          </button>
+          <Link href="/catalogue">
+            <button className="flex items-center justify-center border border-black/40 cursor-pointer hover:-translate-y-2 duration-500 rounded-xl py-2 px-4 text-sm md:text-base">
+              Découvrir le catalogue
+              <MoveRight className="ml-2" size={18} />
+            </button>
+          </Link>
+          <Link href="/notre-histoire">
+            <button className="flex items-center justify-center bg-(--primary) text-white cursor-pointer hover:-translate-y-2 duration-500 rounded-xl py-2 px-4 text-sm md:text-base">
+              Notre histoire
+              <MoveUpRight className="ml-2" size={18} />
+            </button>
+          </Link>
         </div>
         <span className="block w-full md:w-[500px] h-[1px] mt-6 md:mt-8 ml-0 md:ml-12 bg-gray-300"></span>
         <div className="flex flex-wrap gap-6 md:gap-10 ml-0 md:ml-12 mt-4 justify-center md:justify-start">

@@ -1,0 +1,139 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ────────────────────────────────────────
+// PRODUITS
+// ────────────────────────────────────────
+
+model Product {
+  id               Int       @id @default(autoincrement())
+  slug             String    @unique
+  name             String
+  shortDescription String
+  description      String
+  price            Int       // en FCFA, pas de décimales
+  comparePrice     Int?      // prix barré optionnel
+  category         String    // cafes | thes | accessoires | coffrets
+  subcategory      String?
+  origin           String?
+  roast            String?
+  process          String?
+  altitude         String?
+  tastingNotes     String[]  // tableau de strings PostgreSQL
+  grindOptions     String[]
+  weightOptions    Int[]
+  stock            Int       @default(0)
+  rating           Float     @default(0)
+  reviewCount      Int       @default(0)
+  isFeatured       Boolean   @default(false)
+  isNew            Boolean   @default(false)
+  isActive         Boolean   @default(true) // pour désactiver sans supprimer
+  image            String?
+  images           String[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  // Relations
+  orderItems       OrderItem[]
+
+  @@map("products")
+}
+
+// ────────────────────────────────────────
+// COMMANDES
+// ────────────────────────────────────────
+
+model Order {
+  id            Int         @id @default(autoincrement())
+  orderNumber   String      @unique // ex: BB-123456
+  status        OrderStatus @default(PENDING)
+  
+  // Client
+  firstName     String
+  lastName      String
+  email         String
+  phone         String
+  
+  // Livraison
+  address       String
+  city          String
+  country       String
+  notes         String?
+  
+  // Paiement
+  paymentMethod String      // mobile_money | cash | virement
+  paymentStatus PaymentStatus @default(PENDING)
+  
+  // Montants
+  subtotal      Int         // en FCFA
+  shipping      Int         @default(0)
+  total         Int
+
+  // Relations
+  items         OrderItem[]
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  quantity  Int
+  price     Int     // prix unitaire au moment de la commande
+  options   Json?   // { weight: 250, grind: "Grains entiers" }
+
+  // Relations
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   Int
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+
+  @@map("order_items")
+}
+
+// ────────────────────────────────────────
+// ENUMS
+// ────────────────────────────────────────
+
+enum OrderStatus {
+  PENDING      // En attente de confirmation
+  CONFIRMED    // Confirmée
+  PROCESSING   // En préparation
+  SHIPPED      // Expédiée
+  DELIVERED    // Livrée
+  CANCELLED    // Annulée
+}
+
+enum PaymentStatus {
+  PENDING      // En attente
+  PAID         // Payée
+  FAILED       // Échouée
+  REFUNDED     // Remboursée
+}
+
+enum AdminRole {
+  ADMIN
+  MODERATOR
+}
+
+model Admin{
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  password  String
+  name      String?
+  role      AdminRole @default(MODERATOR)
+  isActive  Boolean   @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admins")
+}
