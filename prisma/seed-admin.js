@@ -41,7 +41,7 @@ async function main() {
   console.log('\n⚠️  Les mots de passe utilisés sont stockés de manière sécurisée (hachés)')
   console.log('📝 Assurez-vous de mémoriser ou sauvegarder les identifiants dans un endroit sûr!')
 }
-}
+
 
 main()
   .catch((e) => {

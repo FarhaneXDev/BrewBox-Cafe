@@ -2,6 +2,7 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/layout/Navbar";
 import CartDrawer from "../components/panier/CartDrawer";
+import Footer from "../components/layout/Footer"
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -24,6 +25,7 @@ export default function RootLayout({ children }) {
         <CartDrawer />
         {children}
       </body>
+      <Footer />
     </html>
   );
 }
